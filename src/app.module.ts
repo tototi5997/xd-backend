@@ -4,6 +4,7 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/user.entity';
 import { DiscipleModule } from './disciple/disciple.module';
+import { Disciple } from './disciple/disciple.entity';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { DiscipleModule } from './disciple/disciple.module';
       password: '@admin123',
       database: 'test-sql',
       synchronize: true, // 创建表
-      entities: [User],
+      entities: [User, Disciple],
       connectorPackage: 'mysql2',
     }),
   ],

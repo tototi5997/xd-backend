@@ -12,6 +12,11 @@ export class UserService {
   @InjectRepository(User)
   private userRepository: Repository<User>;
 
+  /**
+   * 注册
+   * @param accountInfo
+   * @returns
+   */
   async register(accountInfo: AccountInfo) {
     const is_exit = await this.userRepository.find({
       where: { phone: accountInfo.phone },
@@ -29,11 +34,20 @@ export class UserService {
     }
   }
 
+  /**
+   *  获取所有用户
+   * @returns
+   */
   async getAllUsers() {
     const users = await this.userRepository.find();
     return users;
   }
 
+  /**
+   * 登录
+   * @param loginInfo
+   * @returns
+   */
   async login(loginInfo: Pick<AccountInfo, 'phone' | 'password'>) {
     const user = await this.userRepository.find({
       where: {
