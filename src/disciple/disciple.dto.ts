@@ -1,11 +1,22 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, Min } from 'class-validator';
 import { MainAttribute, SubAttribute } from './disciple.interface';
 
 export class DiscipleQueryDto {
   mian_attribute_id?: MainAttribute;
   mian_attribute_val?: number;
-  // sub_attributes?: SubAttribute[];
-  ownerId?: number;
+
+  owner_id?: number;
+
+  // ownerId?: number;
+  @IsInt()
+  @IsOptional()
+  @Min(1)
+  index?: number;
+
+  @IsInt()
+  @IsOptional()
+  @Min(1)
+  pageSize?: number;
 }
 
 export class DiscipleCreateDto {

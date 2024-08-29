@@ -8,7 +8,12 @@ export class DiscipleController {
 
   @Post()
   getAllDisciples(@Body() discipleQueryDto: DiscipleQueryDto) {
-    return this.discipleService.getDisciples(discipleQueryDto);
+    const { index = 1, pageSize = 10 } = discipleQueryDto;
+    return this.discipleService.getDisciples({
+      ...discipleQueryDto,
+      index,
+      pageSize,
+    });
   }
 
   @Post('create')

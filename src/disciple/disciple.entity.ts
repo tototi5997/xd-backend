@@ -35,11 +35,11 @@ export class Disciple {
   @Column('json')
   sub_attributes_val: number[];
 
-  @Column()
-  want_for_main: number;
+  @Column('int', { nullable: true, default: null })
+  want_for_main: number | null;
 
-  @Column()
-  want_for_main_val: number;
+  @Column('int', { nullable: true, default: null })
+  want_for_main_val: number | null;
 
   @Column('json')
   want_for_sub: number[];

@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { DecipleWantFor, DiscipleQueryParams } from './disciple.interface';
+import {
+  DecipleWantFor,
+  DiscipleQueryParams,
+  MainAttrMap,
+  SubAttrMap,
+} from './disciple.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Disciple } from './disciple.entity';
@@ -19,19 +24,43 @@ export class DiscipleService {
    * @returns
    */
   async getDisciples(params?: DiscipleQueryParams) {
-    const { ownerId, mian_attribute_id, mian_attribute_val } = params ?? {};
+    const { index, pageSize, mian_attribute_id, mian_attribute_val, owner_id } =
+      params ?? {};
 
-    const res = await this.discipleRepository.find({
+    const [res, total] = await this.discipleRepository.findAndCount({
       where: {
-        owner: { id: ownerId },
         mian_attribute_id,
         mian_attribute_val,
+        owner: { id: owner_id },
       },
+      skip: (index - 1) * pageSize,
+      take: pageSize,
+      relations: ['owner'],
     });
 
+    const transfer_data = res?.map((item) => {
+      return {
+        id: item.disciple_id,
+        owner: item?.owner?.name,
+        owner_id: item?.owner?.id,
+        mian_attribute: MainAttrMap?.[item.mian_attribute_id],
+        mian_attribute_val: item.mian_attribute_val,
+        sub_attributes: item.sub_attributes.map((id, index) => [
+          SubAttrMap?.[id],
+          item.sub_attributes_val[index],
+        ]),
+        want_for_main: MainAttrMap?.[item.want_for_main],
+        want_for_main_val: item.want_for_main_val,
+        want_for_sub: item.want_for_sub.map((id) => SubAttrMap?.[id]),
+      };
+    });
+
+    // console.log(transfer_data);
+
     return {
-      data: res,
-      length: res.length,
+      data: transfer_data,
+      total,
+      index,
     };
   }
 
@@ -47,7 +76,10 @@ export class DiscipleService {
 
     if (!owner.length) return { message: 'owner is not exist' };
 
-    const instance = this.discipleRepository.create({ ...disciple });
+    const instance = this.discipleRepository.create({
+      ...disciple,
+      owner: owner[0],
+    });
 
     const res = await this.discipleRepository.save(instance);
 

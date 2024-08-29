@@ -24,6 +24,32 @@ export enum SubAttribute {
   GJ, // gong ji
 }
 
+export const MainAttrMap: Record<number, string> = {
+  0: '击晕',
+  1: '暴击',
+  2: '反击',
+  3: '闪避',
+  4: '吸血',
+  5: '连击',
+  6: '抗晕',
+  7: '抗暴击',
+  8: '抗反击',
+  9: '抗闪比',
+  10: '抗吸血',
+  11: '抗连击',
+};
+
+export const SubAttrMap: Record<number, string> = {
+  0: '减伤',
+  1: '增伤',
+  2: '弱灵',
+  3: '强灵',
+  4: '弱疗',
+  5: '强疗',
+  6: '暴伤',
+  7: '攻击',
+};
+
 export interface Deciple {
   id?: number;
   ownerId: number;
@@ -40,8 +66,12 @@ export interface DecipleWantFor extends Deciple {
 }
 
 export type DiscipleQueryParams = {
+  // 主属性
   mian_attribute_id?: MainAttribute;
+  // 主属性数值
   mian_attribute_val?: number;
-  // sub_attributes?: SubAttribute[];
-  ownerId?: number;
+  // 拥有者
+  owner_id?: number;
+  index?: number;
+  pageSize?: number;
 };
