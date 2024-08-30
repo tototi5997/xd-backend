@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { DiscipleService } from './disciple.service';
 import { DiscipleCreateDto, DiscipleQueryDto } from './disciple.dto';
 
@@ -14,6 +14,11 @@ export class DiscipleController {
       index,
       pageSize,
     });
+  }
+
+  @Get('rank')
+  getRankDisciples() {
+    return this.discipleService.getRankDisciples();
   }
 
   @Post('create')

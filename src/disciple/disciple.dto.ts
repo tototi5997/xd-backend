@@ -6,6 +6,7 @@ export class DiscipleQueryDto {
   mian_attribute_val?: number;
 
   owner_id?: number;
+  disciple_id?: string;
 
   // ownerId?: number;
   @IsInt()

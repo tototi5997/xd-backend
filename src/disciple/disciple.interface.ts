@@ -74,4 +74,5 @@ export type DiscipleQueryParams = {
   owner_id?: number;
   index?: number;
   pageSize?: number;
+  disciple_id?: string;
 };

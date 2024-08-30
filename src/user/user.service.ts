@@ -61,12 +61,21 @@ export class UserService {
    * @returns
    */
   async register(accountInfo: AccountInfo) {
-    const existingUser = await this.userRepository.find({
+    const existingUserPhone = await this.userRepository.find({
       where: { phone: accountInfo.phone },
     });
-    if (existingUser.length) throw new ConflictException('User already exists');
+
+    if (existingUserPhone.length)
+      throw new ConflictException('该手机号已经被注册');
+
+    const [existingUserName] = await this.userRepository.find({
+      where: { name: accountInfo.name },
+    });
+
+    if (existingUserName) throw new ConflictException('该昵称已经被使用');
 
     const hashedPassword = await bycrypt.hash(accountInfo.password, 10);
+
     const newUser = await this.userRepository.create({
       ...accountInfo,
       password: hashedPassword,

@@ -4,6 +4,7 @@ import { uuid } from 'src/utils/uuid';
 import {
   BeforeInsert,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -43,6 +44,9 @@ export class Disciple {
 
   @Column('json')
   want_for_sub: number[];
+
+  @CreateDateColumn()
+  create_at: Date;
 
   @BeforeInsert()
   public generateDiscipleId() {

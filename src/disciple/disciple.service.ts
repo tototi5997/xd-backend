@@ -24,14 +24,24 @@ export class DiscipleService {
    * @returns
    */
   async getDisciples(params?: DiscipleQueryParams) {
-    const { index, pageSize, mian_attribute_id, mian_attribute_val, owner_id } =
-      params ?? {};
+    const {
+      index,
+      pageSize,
+      mian_attribute_id,
+      mian_attribute_val,
+      owner_id,
+      disciple_id,
+    } = params ?? {};
 
     const [res, total] = await this.discipleRepository.findAndCount({
       where: {
         mian_attribute_id,
         mian_attribute_val,
         owner: { id: owner_id },
+        disciple_id,
+      },
+      order: {
+        create_at: 'DESC',
       },
       skip: (index - 1) * pageSize,
       take: pageSize,
@@ -61,6 +71,37 @@ export class DiscipleService {
       data: transfer_data,
       total,
       index,
+    };
+  }
+
+  async getRankDisciples() {
+    const res = await this.discipleRepository.find({
+      order: {
+        mian_attribute_val: 'DESC',
+      },
+      take: 10,
+      relations: ['owner'],
+    });
+
+    const transfer_data = res?.map((item) => {
+      return {
+        id: item.disciple_id,
+        owner: item?.owner?.name,
+        owner_id: item?.owner?.id,
+        mian_attribute: MainAttrMap?.[item.mian_attribute_id],
+        mian_attribute_val: item.mian_attribute_val,
+        sub_attributes: item.sub_attributes.map((id, index) => [
+          SubAttrMap?.[id],
+          item.sub_attributes_val[index],
+        ]),
+        want_for_main: MainAttrMap?.[item.want_for_main],
+        want_for_main_val: item.want_for_main_val,
+        want_for_sub: item.want_for_sub.map((id) => SubAttrMap?.[id]),
+      };
+    });
+
+    return {
+      data: transfer_data,
     };
   }
 
