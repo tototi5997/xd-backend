@@ -34,7 +34,7 @@ export const MainAttrMap: Record<number, string> = {
   6: '抗晕',
   7: '抗暴击',
   8: '抗反击',
-  9: '抗闪比',
+  9: '抗闪避',
   10: '抗吸血',
   11: '抗连击',
 };
